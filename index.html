@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Carte mondiale avec données météorologiques</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="mapid"></div>
+
+<!-- Sidebar -->
+<div id="sidebar" class="sidebar" aria-labelledby="sidebar-title" aria-hidden="true">
+    <h2 id="sidebar-title" class="sr-only">Détails météorologiques</h2>
+    <button id="close-sidebar" aria-label="Fermer la barre latérale">X</button>
+    <div id="loading-spinner" style="display: none; text-align: center; margin-top: 20px;">
+        <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+        <span class="sr-only">Chargement des données météorologiques...</span>
+        <p>Chargement des données météorologiques...</p>
+    </div>
+    <div id="sidebar-content" role="region" aria-live="polite">
+        <!-- Les prévisions météorologiques seront affichées ici sous forme de tableaux -->
+    </div>
+</div>
+
+<!-- Hamburger menu -->
+<div class="hamburger-menu" id="hamburger-menu" aria-label="Menu principal">
+    <div class="hamburger-icon" id="hamburger-icon" role="button" tabindex="0" aria-expanded="false">
+        <i class="fas fa-bars" aria-hidden="true"></i>
+        <span class="sr-only">Ouvrir le menu</span>
+    </div>
+    <div class="menu-content" id="menu-content" aria-hidden="true">
+        <input type="text" id="hamburger-city-search" placeholder="Rechercher une ville..." style="padding: 5px; border: 1px solid var(--border-color); border-radius: 3px; margin-bottom: 10px;">
+        <button id="hamburger-search-button" style="padding: 5px 10px; background-color: var(--primary-color); color: white; border: none; border-radius: 3px; cursor: pointer;">Rechercher</button>
+        <button id="theme-toggle" aria-label="Activer/Désactiver le mode sombre">Activer/Désactiver le mode sombre</button>
+        <button id="reset-map" aria-label="Réinitialiser la carte">Réinitialiser la carte</button>
+        <button id="toggle-color-icons">Désactiver les icônes colorées</button>
+        <button id="show-error-history" aria-label="Afficher l'historique des erreurs">Afficher l'historique des erreurs</button>
+        <div id="toggle-options">
+    <label>
+        <input type="checkbox" id="toggle-humidity"> Afficher l'humidité
+    </label>
+    <label>
+        <input type="checkbox" id="toggle-pressure"> Afficher la pression
+    </label>
+    <label>
+        <input type="checkbox" id="toggle-uv"> Afficher l'indice UV
+    </label>
+    <label>
+        <input type="checkbox" id="toggle-wind" checked> Afficher le vent
+    </label>
+</div>
+    </div>
+</div>
+
+<!-- API Call Counter -->
+<div id="api-counter" style="position: fixed; bottom: 10px; left: 10px; background-color: rgba(255, 255, 255, 0.8); padding: 5px 10px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); z-index: 1000;">
+    Appels API : <span id="api-count">0</span>
+</div>
+
+<!-- Cache Size Display -->
+<div id="cache-size" style="position: fixed; bottom: 10px; left: 210px; background-color: rgba(255, 255, 255, 0.8); padding: 5px 10px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); z-index: 1000;">
+    Taille du cache : <span id="cache-size-value">0 KB</span>
+</div>
+
+<!-- Error Popup -->
+<div id="error-popup" class="popup" aria-labelledby="error-popup-title" aria-hidden="true">
+    <div class="popup-content">
+        <h2 id="error-popup-title">Historique des erreurs</h2>
+        <button id="close-error-popup" aria-label="Fermer la popup d'erreur">X</button>
+        <ul id="error-messages-popup"></ul>
+    </div>
+</div>
+
+<!-- Stats Popup -->
+<div id="stats-popup" class="popup" aria-labelledby="stats-popup-title" aria-hidden="true">
+    <div class="popup-content">
+        <h2 id="stats-popup-title">Statistiques</h2>
+        <button id="close-stats-popup" aria-label="Fermer la fenêtre des statistiques">X</button>
+        <div id="stats-content">
+            <!-- Le contenu des statistiques sera injecté ici -->
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="cities.js"></script>
+<script src="scripts.js"></script>
+
+</body>
+</html>
