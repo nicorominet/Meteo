@@ -14,7 +14,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const errorPopup = document.getElementById('error-popup');
     const statsPopup = document.getElementById('stats-popup');
     const closeStatsPopupButton = document.getElementById('close-stats-popup');
-
     // Variables globales pour les statistiques
     let stats = {
         totalViews: 0,
@@ -26,19 +25,16 @@ document.addEventListener('DOMContentLoaded', function () {
         cacheHits: 0,
         cacheMisses: 0,
     };
-
     // Gestionnaire d'événements pour le menu hamburger
     hamburgerIcon.addEventListener('click', function () {
         menuContent.classList.toggle('open');
         hamburgerIcon.setAttribute('aria-expanded', menuContent.classList.contains('open'));
     });
-
     // Fonction pour suivre les points de vue (zooms, déplacements, clics)
     function trackView() {
         stats.totalViews++;
         console.log(`Total views: ${stats.totalViews}`);
     }
-
     // Fonction pour suivre les appels API par fonction
     function trackApiCall(functionName) {
         if (!stats.apiCalls[functionName]) {
@@ -47,13 +43,11 @@ document.addEventListener('DOMContentLoaded', function () {
         stats.apiCalls[functionName]++;
         console.log(`Appels API pour ${functionName}: ${stats.apiCalls[functionName]}`);
     }
-
     // Fonction pour afficher les statistiques
     function displayStats() {
             console.log('Contenu de stats.apiCalls:', stats.apiCalls); // Ajoutez ce log
         const averageResponseTime = stats.apiResponseTimes.reduce((a, b) => a + b, 0) / stats.apiResponseTimes.length || 0;
         const averageResponseSize = stats.apiResponseSizes.reduce((a, b) => a + b, 0) / stats.apiResponseSizes.length || 0;
-
         const statsContent = `
             <h2>Statistiques</h2>
             <p>Total des points de vue : ${stats.totalViews}</p>
@@ -67,29 +61,24 @@ document.addEventListener('DOMContentLoaded', function () {
                 ${Object.entries(stats.apiCalls).map(([func, count]) => `<li>${func}: ${count}</li>`).join('')}
             </ul>
         `;
-
         statsPopup.innerHTML = statsContent;
         statsPopup.style.display = 'block';
     }
-
     // Ajouter un bouton pour afficher les statistiques
     const statsButton = document.createElement('button');
     statsButton.textContent = 'Afficher les statistiques';
     statsButton.addEventListener('click', displayStats);
     document.getElementById('menu-content').appendChild(statsButton);
-
     // Fermer la fenêtre des statistiques en cliquant à l'extérieur
     document.addEventListener('click', function (e) {
         if (!statsPopup.contains(e.target) && e.target !== statsButton) {
             statsPopup.style.display = 'none';
         }
     });
-
     // Fermer la fenêtre des statistiques
     closeStatsPopupButton.addEventListener('click', function () {
         statsPopup.style.display = 'none';
     });
-
     // Gestionnaire d'événements pour la touche "Entrée" dans le champ de recherche du menu hamburger
     searchInput.addEventListener('keypress', function (e) {
         if (e.key === 'Enter') {
@@ -101,7 +90,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
     });
-
     // Gestionnaire d'événements pour le bouton de recherche dans le menu hamburger
     searchButton.addEventListener('click', function () {
         const cityName = searchInput.value;
@@ -111,7 +99,6 @@ document.addEventListener('DOMContentLoaded', function () {
             addErrorToList('Veuillez entrer un nom de ville.');
         }
     });
-
     // Fonction pour rechercher une ville et la localiser sur la carte
     function searchAndDisplayCity(cityName) {
         trackApiCall('searchAndDisplayCity');
@@ -124,11 +111,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (data.length === 0) {
                     throw new Error('Ville non trouvée');
                 }
-
                 const firstResult = data[0];
                 const lat = parseFloat(firstResult.lat);
                 const lng = parseFloat(firstResult.lon);
-
                 map.setView([lat, lng], 10);
                 getWeather(lat, lng, firstResult.display_name);
             })
@@ -137,26 +122,21 @@ document.addEventListener('DOMContentLoaded', function () {
                 addErrorToList(`Erreur lors de la recherche de la ville : ${error.message}`);
             });
     }
-
     // Configuration de la carte
     const mapCenter = [46.2276, 2.2137];
     const mapZoomLevel = 6;
     console.log(`Initialisation de la carte avec le centre à ${mapCenter} et le niveau de zoom à ${mapZoomLevel}.`);
     const map = L.map('mapid').setView(mapCenter, mapZoomLevel);
-
     // Tuiles pour le mode clair (par défaut)
     const lightTiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors'
     });
-
     // Tuiles pour le mode sombre (exemple avec CartoDB Dark Matter)
     const darkTiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
         attribution: '&copy; OpenStreetMap contributors, &copy; CARTO'
     });
-
     // Ajouter les tuiles par défaut (mode clair)
     lightTiles.addTo(map);
-
     // Fonction pour basculer entre les tuiles en fonction du thème
     function updateMapTheme() {
         const isDarkMode = document.body.getAttribute('data-theme') === 'dark';
@@ -168,10 +148,8 @@ document.addEventListener('DOMContentLoaded', function () {
             lightTiles.addTo(map);
         }
     }
-
     // Appliquer le thème correct au chargement de la page
     updateMapTheme();
-
     // Variables globales
     let apiCallCount = 0;
     let colorIconsEnabled = true;
@@ -179,7 +157,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const markers = L.layerGroup().addTo(map);
     const loadedMarkers = new Set();
     let currentWeatherData = null;
-
     // Fonction pour ajouter des messages d'erreur à la liste
     function addErrorToList(message) {
         const errorListPopup = document.getElementById('error-messages-popup');
@@ -191,47 +168,45 @@ document.addEventListener('DOMContentLoaded', function () {
         const errorItem = document.createElement('li');
         errorItem.textContent = `[${timestamp}] ${message}`;
         errorItem.style.marginBottom = '5px';
-
         errorListPopup.appendChild(errorItem);
-
         // Afficher la popup si elle est cachée
         errorPopup.classList.add('open');
         sortErrorList();
     }
-
     // Fonction pour trier la liste des erreurs
     function sortErrorList() {
         const errorListPopup = document.getElementById('error-messages-popup');
         const errorItems = Array.from(errorListPopup.children);
-
         // Trier les éléments en fonction de leur contenu (timestamp)
         errorItems.sort((a, b) => {
             const timestampA = a.textContent.match(/\[(\d{2}:\d{2}:\d{2})\]/)[1];
             const timestampB = b.textContent.match(/\[(\d{2}:\d{2}:\d{2})\]/)[1];
             return timestampA.localeCompare(timestampB);
         });
-
         // Réorganiser les éléments dans la liste
         errorItems.forEach(item => errorListPopup.appendChild(item));
     }
-
     // Fonction pour vérifier si le cache est valide
     function isCacheValid(cachedData) {
         const CACHE_EXPIRATION_TIME = 30 * 60 * 1000; // 30 minutes en millisecondes
         return cachedData && (Date.now() - cachedData.timestamp) < CACHE_EXPIRATION_TIME;
     }
-
     // Gestionnaire pour fermer la popup
     closeErrorPopupButton.addEventListener('click', function () {
         errorPopup.classList.remove('open');
     });
-
     // Fonction pour nettoyer le cache des entrées expirées
     function cleanCache() {
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
-            const cachedData = JSON.parse(localStorage.getItem(key));
-
+            let cachedData;
+            try {
+                cachedData = JSON.parse(localStorage.getItem(key));
+            } catch (e) {
+                console.warn(`Données corrompues pour la clé ${key}, suppression.`);
+                localStorage.removeItem(key);
+                continue;
+            }
             if (!isCacheValid(cachedData)) {
                 console.log(`Suppression de l'entrée de cache expirée avec la clé : ${key}`);
                 localStorage.removeItem(key);
@@ -239,26 +214,27 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         updateCacheSizeDisplay();
     }
-
     // Fonction pour limiter la taille du cache
     function limitCacheSize() {
         const MAX_CACHE_SIZE_KB = 500; // Taille maximale du cache en Ko
         let cacheSizeKB = calculateCacheSize();
-
         while (cacheSizeKB > MAX_CACHE_SIZE_KB) {
             let oldestKey = null;
             let oldestTimestamp = Date.now();
-
             for (let i = 0; i < localStorage.length; i++) {
                 const key = localStorage.key(i);
-                const cachedData = JSON.parse(localStorage.getItem(key));
-
+                let cachedData;
+                try {
+                    cachedData = JSON.parse(localStorage.getItem(key));
+                } catch (e) {
+                    localStorage.removeItem(key);
+                    continue;
+                }
                 if (cachedData.timestamp < oldestTimestamp) {
                     oldestKey = key;
                     oldestTimestamp = cachedData.timestamp;
                 }
             }
-
             if (oldestKey) {
                 console.log(`Suppression de l'entrée de cache la plus ancienne avec la clé : ${oldestKey}`);
                 localStorage.removeItem(oldestKey);
@@ -269,11 +245,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         updateCacheSizeDisplay();
     }
-
     // Fonction pour calculer la taille du cache en Ko
     function calculateCacheSize() {
         let totalSize = 0;
-
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
             const value = localStorage.getItem(key);
@@ -281,39 +255,34 @@ document.addEventListener('DOMContentLoaded', function () {
                 totalSize += key.length * 2 + value.length * 2;
             }
         }
-
         const sizeInKB = (totalSize / 1024).toFixed(2);
         return sizeInKB;
     }
-
     // Fonction pour mettre à jour l'affichage de la taille du cache
     function updateCacheSizeDisplay() {
         const cacheSizeKB = calculateCacheSize();
         document.getElementById('cache-size-value').textContent = `${cacheSizeKB} KB`;
     }
-
     // Fonction pour récupérer les données météo depuis l'API Open-Meteo
 async function fetchWeatherData(lat, lng, locationName) {
     trackApiCall('fetchWeatherData');
     const startTime = Date.now();
-    const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true&hourly=temperature_2m,precipitation,relativehumidity_2m,pressure_msl,uv_index,weathercode,windspeed_10m,winddirection_10m&daily=weathercode,temperature_2m_max,temperature_2m_min,windspeed_10m_max&timezone=auto`;
+    const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true&hourly=temperature_2m,precipitation,relativehumidity_2m,pressure_msl,uv_index,weathercode,windspeed_10m,winddirection_10m&daily=weathercode,temperature_2m_max,temperature_2m_min,windspeed_10m_max,sunrise,sunset&timezone=auto`;
+    
     console.log(`Appel API à Open-Meteo : ${apiUrl}`);
     apiCallCount++;
     document.getElementById('api-count').textContent = apiCallCount;
-
     try {
         const response = await fetch(apiUrl);
         const endTime = Date.now();
         const responseTime = endTime - startTime;
         stats.apiResponseTimes.push(responseTime);
         console.log(`Temps de réponse de l'API : ${responseTime} ms`);
-
         if (!response.ok) throw new Error('La réponse du réseau n\'est pas valide');
         const data = await response.json();
-
         stats.apiSuccessCount++;
-        stats.apiResponseSizes.push(JSON.stringify(data).length);
-
+        const responseSize = new TextEncoder().encode(JSON.stringify(data)).length;
+        stats.apiResponseSizes.push(responseSize);
         // Ajouter le fuseau horaire de la ville dans les données
         data.timezone = data.timezone || 'UTC'; // Par défaut, utiliser UTC si le fuseau horaire n'est pas disponible
         return data;
@@ -330,7 +299,6 @@ function getLocalTime(timezone) {
     const options = { timeZone: timezone, hour: '2-digit', minute: '2-digit', hour12: false };
     return now.toLocaleTimeString('fr-FR', options);
 }
-
     // Fonction pour mettre à jour l'heure locale dans le menu
 function updateMenuWithLocalTime(timezone) {
     const localTime = getLocalTime(timezone);
@@ -340,13 +308,11 @@ function updateMenuWithLocalTime(timezone) {
         localTimeElement.textContent = `Date : ${localDate} - Heure locale : ${localTime}`;
     }
 }
-
     // Fonction pour récupérer les données météo avec cache
     async function getWeather(lat, lng, locationName) {
         trackApiCall('getWeather');
         const cacheKey = `${lat},${lng}`;
         const cachedData = JSON.parse(localStorage.getItem(cacheKey));
-
         if (isCacheValid(cachedData)) {
             stats.cacheHits++;
             console.log(`Cache hit pour ${locationName}. Utilisation des données en cache.`);
@@ -358,23 +324,17 @@ function updateMenuWithLocalTime(timezone) {
             stats.cacheMisses++;
             console.log(`Cache miss pour ${locationName}. Appel API nécessaire.`);
         }
-
         console.log(`Récupération des données météorologiques pour ${locationName} aux coordonnées (${lat}, ${lng}).`);
         document.getElementById('loading-spinner').style.display = 'block';
         document.getElementById('sidebar-content').innerHTML = '';
-
         const data = await fetchWeatherData(lat, lng, locationName);
-
         if (data) {
             console.log(`Données météorologiques récupérées avec succès pour ${locationName}. Mise en cache des données.`);
-
             const localTime = getLocalTime(data.timezone);
-
             const cacheEntry = { data, timestamp: Date.now(), localTime };
             localStorage.setItem(cacheKey, JSON.stringify(cacheEntry));
             updateCacheSizeDisplay();
             limitCacheSize();
-
             document.getElementById('loading-spinner').style.display = 'none';
             currentWeatherData = data;
             displayWeatherData(data, locationName);
@@ -385,7 +345,6 @@ function updateMenuWithLocalTime(timezone) {
             document.getElementById('sidebar').classList.add('open');
         }
     }
-
     // Mapping des codes météo aux icônes
     const weatherIconMapping = {
         0: 'fas fa-sun',
@@ -417,13 +376,10 @@ function updateMenuWithLocalTime(timezone) {
         96: 'fas fa-bolt',
         99: 'fas fa-bolt',
     };
-
     // Fonction pour obtenir la couleur en fonction de la température
     function getColorForTemperature(temp) {
         if (temp === undefined || isNaN(temp)) return '#000000';
-
         const isDarkMode = document.body.getAttribute('data-theme') === 'dark';
-
         if (isDarkMode) {
             if (temp >= 40) return '#FF6B6B';
             else if (temp >= 35) return '#FF8E6B';
@@ -457,7 +413,6 @@ function updateMenuWithLocalTime(timezone) {
             else return '#000000';
         }
     }
-
     // Fonction pour obtenir la couleur du texte en fonction de la couleur de fond
     function getTextColorForBackground(bgColor) {
         const r = parseInt(bgColor.slice(1, 3), 16);
@@ -466,13 +421,11 @@ function updateMenuWithLocalTime(timezone) {
         const luminance = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
         return luminance > 0.5 ? '#000000' : '#FFFFFF';
     }
-
     // Fonction pour créer une icône de marqueur
     function createMarkerIcon(weatherCode, temp, precipitation = 0) {
         const isDarkMode = document.body.getAttribute('data-theme') === 'dark';
         const defaultColor = isDarkMode ? '#333' : '#ccc';
         const textColor = isDarkMode ? '#fff' : '#000';
-
         if (!colorIconsEnabled) {
             return L.icon({
                 iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
@@ -483,16 +436,12 @@ function updateMenuWithLocalTime(timezone) {
                 shadowSize: [41, 41]
             });
         }
-
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         const defaultIconClass = 'fas fa-question';
         const iconClass = weatherIconMapping[weatherCode] || defaultIconClass;
-
         const color = getColorForTemperature(temp);
-
         let animationClass = '';
         let animationSpeed = '1s';
-
         if (!isMobile) {
             switch (true) {
                 case weatherCode === 0:
@@ -525,7 +474,6 @@ function updateMenuWithLocalTime(timezone) {
                     break;
             }
         }
-
         return L.divIcon({
             className: `custom-marker`,
             html: `
@@ -548,7 +496,6 @@ function updateMenuWithLocalTime(timezone) {
             `
         });
     }
-
     // Fonction pour obtenir la description météo en fonction du code météo
     function getWeatherDescription(weatherCode) {
         const descriptions = {
@@ -583,11 +530,9 @@ function updateMenuWithLocalTime(timezone) {
         };
         return descriptions[weatherCode] || '❓ Condition météorologique inconnue';
     }
-
     // Fonction pour afficher les données météo dans la barre latérale
 function displayWeatherData(data, locationName) {
     console.log('Affichage des données météorologiques pour :', locationName);
-
     if (!data || !data.current_weather || !data.hourly || !data.daily) {
         console.error('Données invalides ou incomplètes reçues de l\'API :', data);
         addErrorToList('Données météorologiques invalides ou incomplètes reçues.');
@@ -595,21 +540,17 @@ function displayWeatherData(data, locationName) {
         document.getElementById('sidebar').classList.add('open');
         return;
     }
-
     // Récupérer l'heure locale actuelle du lieu
     const localTime = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', timeZone: data.timezone });
     const localHour = new Date().toLocaleString('fr-FR', { hour: '2-digit', timeZone: data.timezone, hour12: false });
     const localDate = new Date().toLocaleDateString('fr-FR', { timeZone: data.timezone });
-
     // Trouver l'index de départ dans les données horaires
     const startIndex = data.hourly.time.findIndex(time => {
         const hour = new Date(time).toLocaleString('fr-FR', { hour: '2-digit', timeZone: data.timezone, hour12: false });
         return hour === localHour;
     });
-
     // Si l'index de départ n'est pas trouvé, commencer à partir de l'index 0
     const adjustedStartIndex = startIndex === -1 ? 0 : startIndex;
-
     // Ajuster les prévisions horaires pour commencer à l'heure locale
     const hourlyForecast = data.hourly.time
         ? data.hourly.time.slice(adjustedStartIndex, adjustedStartIndex + 24).map((time, index) => {
@@ -627,7 +568,6 @@ function displayWeatherData(data, locationName) {
             };
         })
         : [];
-
     // Prévisions quotidiennes
     const dailyForecast = data.daily.time
         ? data.daily.time.slice(0, 7).map((time, index) => {
@@ -641,13 +581,11 @@ function displayWeatherData(data, locationName) {
             };
         })
         : [];
-
     // Vérifier l'état des cases à cocher
     const showHumidity = document.getElementById('toggle-humidity')?.checked ?? true;
     const showPressure = document.getElementById('toggle-pressure')?.checked ?? true;
     const showUV = document.getElementById('toggle-uv')?.checked ?? true;
     const showWind = document.getElementById('toggle-wind')?.checked ?? true; // Nouvelle case à cocher pour le vent
-
     // Générer le contenu HTML pour les prévisions horaires
     const hourlyForecastHTML = `
         <h3>Prévisions sur 24 heures</h3>
@@ -702,7 +640,6 @@ function displayWeatherData(data, locationName) {
             </tbody>
         </table>
     `;
-
     // Générer le contenu HTML pour les prévisions quotidiennes
     const dailyForecastHTML = `
         <h3>Prévisions sur 7 jours</h3>
@@ -735,10 +672,11 @@ function displayWeatherData(data, locationName) {
             </tbody>
         </table>
     `;
-
     // Générer le contenu complet de la barre latérale
     const content = `
-        <strong>Lieu : ${locationName}</strong><br>
+        <strong>Lieu : ${locationName} </strong>
+        <i class="fas fa-sun"></i><i class="fa-solid fa-turn-up"></i> ${new Date(data.daily.sunrise[0]).toLocaleTimeString()}  
+        <i class="fas fa-sun"></i><i class="fa-solid fa-turn-down"></i> ${new Date(data.daily.sunset[0]).toLocaleTimeString()}<br>
         <strong>Date : ${localDate}</strong><br>
         <strong>Heure locale : ${localTime}</strong><br>
         <strong>Météo actuelle</strong><br>
@@ -749,11 +687,9 @@ function displayWeatherData(data, locationName) {
         ${hourlyForecastHTML}
         ${dailyForecastHTML}
     `;
-
     // Afficher le contenu dans la barre latérale
     document.getElementById('sidebar-content').innerHTML = content;
     document.getElementById('sidebar').classList.add('open');
-
     // Ajouter des gouttes de pluie dynamiques pour les cellules de précipitations
     hourlyForecast.forEach((forecast, index) => {
         const precipitationCell = document.querySelectorAll('.precipitation-cell')[index];
@@ -769,7 +705,7 @@ function displayWeatherData(data, locationName) {
     });
 }
 document.addEventListener('change', function (e) {
-    if (e.target.id === 'toggle-humidity' || e.target.id === 'toggle-pressure' || e.target.id === 'toggle-uv' || e.target.id === 'toggle-wind') {
+    if (['toggle-humidity', 'toggle-pressure', 'toggle-uv', 'toggle-wind'].includes(e.target.id)) {
         const sidebarContent = document.getElementById('sidebar-content');
         if (sidebarContent.innerHTML) {
             const locationName = document.querySelector('#sidebar-content strong').textContent;
@@ -777,39 +713,31 @@ document.addEventListener('change', function (e) {
         }
     }
 });
-
 // Fonction pour créer des gouttes de pluie dynamiques
     function createRainDrops(container, precipitationValue) {
         if (!container) {
             console.error("Conteneur des gouttes de pluie non trouvé.");
             return;
         }
-
         container.innerHTML = '';
-
         const numberOfDrops = Math.floor(precipitationValue * 2);
-
         for (let i = 0; i < numberOfDrops; i++) {
             const drop = document.createElement('div');
             drop.className = 'rain-drop';
-
             drop.style.left = `${Math.random() * 100}%`;
             drop.style.animationDuration = `${Math.random() * 1 + 1}s`;
             const width = Math.random() * 3 + 2;
             const height = Math.random() * 10 + 10;
             drop.style.width = `${width}px`;
             drop.style.height = `${height}px`;
-
             container.appendChild(drop);
         }
     }
-
     // Gestionnaire d'événements pour fermer la barre latérale
     closeSidebarButton.addEventListener('click', function () {
         console.log('Fermeture de la barre latérale');
         sidebar.classList.remove('open');
     });
-
     // Fermer la barre latérale en cliquant à l'extérieur
     document.addEventListener('click', function (e) {
         if (!sidebar.contains(e.target) && !e.target.closest('.leaflet-marker-icon')) {
@@ -817,14 +745,12 @@ document.addEventListener('change', function (e) {
             sidebar.classList.remove('open');
         }
     });
-
     // Gestionnaire d'événements pour les clics sur la carte
     map.on('click', function (e) {
-            trackApiCall('mapClickReverseGeocode'); // Ajoutez cette lig
+            trackApiCall('mapClickReverseGeocode'); // Appel pour effectuer le reverse geocoding
         const lat = e.latlng.lat;
         const lng = e.latlng.lng;
         console.log(`Clic sur la carte aux coordonnées (${lat}, ${lng}). Récupération du nom du lieu.`);
-
         fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
             .then(response => {
                 if (!response.ok) throw new Error('La réponse du réseau n\'est pas valide');
@@ -841,22 +767,18 @@ document.addEventListener('change', function (e) {
                 getWeather(lat, lng, 'Lieu inconnu');
             });
     });
-
     // Empêcher les clics sur la barre latérale de se propager à la carte
     sidebar.addEventListener('click', function (e) {
         e.stopPropagation();
     });
-
     // Fonction pour obtenir les villes visibles sur la carte
     function getVisibleCities(map, cities) {
         const bounds = map.getBounds();
         return cities.filter(city => bounds.contains([city.lat, city.lng]));
     }
-
     // Fonction pour ajouter des marqueurs pour les villes visibles
     function addMarkersForCities(map, cities) {
         const visibleCities = getVisibleCities(map, cities);
-
         visibleCities.forEach(city => {
             if (!loadedMarkers.has(city.name)) {
                 const marker = createMarker(city);
@@ -865,7 +787,6 @@ document.addEventListener('change', function (e) {
             }
         });
     }
-
     // Fonction pour créer un marqueur pour une ville
 function createMarker(city) {
     const marker = L.marker([city.lat, city.lng], {
@@ -876,10 +797,8 @@ function createMarker(city) {
                    </div>`
         })
     }).addTo(markers);
-
     marker.bindTooltip(city.name, { permanent: false, direction: 'top' });
     marker.city = city;
-
     marker.on('click', function (e) {
         if (e.originalEvent) {
             e.originalEvent.stopPropagation();
@@ -894,7 +813,6 @@ function createMarker(city) {
             getWeather(city.lat, city.lng, city.name);
         }
     });
-
     marker._icon.setAttribute('tabindex', '0');
     marker._icon.setAttribute('role', 'button');
     marker._icon.setAttribute('aria-label', `Afficher la météo pour ${city.name}`);
@@ -913,7 +831,19 @@ function createMarker(city) {
             }
         }
     });
-
+    // Add click listener to highlight the selected marker
+    marker.on('click', function () {
+        // Remove 'selected-marker' class from all markers
+        markers.eachLayer(layer => {
+            if (layer._icon) {
+                layer._icon.classList.remove('selected-marker');
+            }
+        });
+        // Add 'selected-marker' class to the clicked marker
+        if (marker._icon) {
+            marker._icon.classList.add('selected-marker');
+        }
+    });
     const cacheKey = `${city.lat},${city.lng}`;
     const cachedData = JSON.parse(localStorage.getItem(cacheKey));
     if (cachedData && isCacheValid(cachedData)) {
@@ -922,50 +852,45 @@ function createMarker(city) {
         const weatherCode = cachedData.data.current_weather.weathercode;
         const precipitation = cachedData.data.hourly.precipitation && cachedData.data.hourly.precipitation.length > 0 ? cachedData.data.hourly.precipitation[0] : 0;
         const windSpeedKmh = (cachedData.data.current_weather.windspeed * 3.6).toFixed(2);
-
         // Récupérer l'heure locale et la date depuis le cache
         const localTime = cachedData.localTime || 'Heure inconnue';
         const localDate = new Date().toLocaleDateString('fr-FR', { timeZone: cachedData.data.timezone });
-
+        // Retrieve sunrise and sunset information from cached data
+        const sunrise = cachedData.data.daily.sunrise[0].split('T')[1]; // modification: keep only time
+        const sunset = cachedData.data.daily.sunset[0].split('T')[1]; // modification: keep only time
         console.log(`Données météorologiques récupérées pour la ville : ${city.name}. Température : ${temp}°C, Code météo : ${weatherCode}, Précipitations : ${precipitation}mm.`);
         const icon = createMarkerIcon(weatherCode, temp, precipitation);
         marker.setIcon(icon);
-
-        let updatedTooltipContent = `${city.name}<br>Date : ${localDate}<br>Heure locale : ${localTime}<br>Température : ${temp}°C<br>Vitesse du vent : ${windSpeedKmh} km/h`;
+        let updatedTooltipContent = `${city.name}<br>Date : ${localDate}<br>Heure locale : ${localTime}<br>Température : ${temp}°C<br>Vitesse du vent : ${windSpeedKmh} km/h<br>Lever de soleil : ${sunrise}<br>coucher de soleil : ${sunset}`;
         if (city.department) {
-            updatedTooltipContent = `${city.name}<br>Département : ${city.department}<br>Date : ${localDate}<br>Heure locale : ${localTime}<br>Température : ${temp}°C<br>Vitesse du vent : ${windSpeedKmh} km/h`;
+            updatedTooltipContent = `${city.name}<br>Département : ${city.department}<br>Date : ${localDate}<br>Heure locale : ${localTime}<br>Température : ${temp}°C<br>Vitesse du vent : ${windSpeedKmh} km/h<br>Lever de soleil : ${sunrise}<br>coucher de soleil : ${sunset}`;
         }
         marker.bindTooltip(updatedTooltipContent, { permanent: false, direction: 'top' });
-
         marker.temp = temp;
         marker.weatherCode = weatherCode;
     } else {
         console.log(`Récupération des données météorologiques initiales pour la ville : ${city.name}.`);
-
         fetchWeatherData(city.lat, city.lng, city.name).then(data => {
             if (data) {
                 const temp = data.current_weather.temperature;
                 const weatherCode = data.current_weather.weathercode;
                 const precipitation = data.hourly.precipitation && data.hourly.precipitation.length > 0 ? data.hourly.precipitation[0] : 0;
                 const windSpeedKmh = (data.current_weather.windspeed * 3.6).toFixed(2);
-
+                const sunset = data.daily.sunset[0].split('T')[1]; // modification: keep only time
+                const sunrise = data.daily.sunrise[0].split('T')[1]; // modification: keep only time
                 // Récupérer l'heure locale et la date à partir des données météorologiques
                 const localTime = getLocalTime(data.timezone);
                 const localDate = new Date().toLocaleDateString('fr-FR', { timeZone: data.timezone });
-
-                console.log(`Données météorologiques récupérées pour la ville : ${city.name}. Température : ${temp}°C, Code météo : ${weatherCode}, Précipitations : ${precipitation}mm.`);
+                console.log(`Données météorologiques récupérées pour la ville : ${city.name}. Température : ${temp}°C, Code météo : ${weatherCode}, Précipitations : ${precipitation}mm, Lever de soleil : ${sunrise}, coucher de soleil : ${sunset}.`);
                 const icon = createMarkerIcon(weatherCode, temp, precipitation);
                 marker.setIcon(icon);
-
-                let updatedTooltipContent = `${city.name}<br>Date : ${localDate}<br>Heure locale : ${localTime}<br>Température : ${temp}°C<br>Vitesse du vent : ${windSpeedKmh} km/h`;
+                let updatedTooltipContent = `${city.name}<br>Date : ${localDate}<br>Heure locale : ${localTime}<br>Température : ${temp}°C<br>Vitesse du vent : ${windSpeedKmh} km/h<br>Lever de soleil : ${sunrise}<br>coucher de soleil : ${sunset}`;
                 if (city.department) {
-                    updatedTooltipContent = `${city.name}<br>Département : ${city.department}<br>Date : ${localDate}<br>Heure locale : ${localTime}<br>Température : ${temp}°C<br>Vitesse du vent : ${windSpeedKmh} km/h`;
+                    updatedTooltipContent = `${city.name}<br>Département : ${city.department}<br>Date : ${localDate}<br>Heure locale : ${localTime}<br>Température : ${temp}°C<br>Vitesse du vent : ${windSpeedKmh} km/h<br>Lever de soleil : ${sunrise}<br>coucher de soleil : ${sunset}`;
                 }
                 marker.bindTooltip(updatedTooltipContent, { permanent: false, direction: 'top' });
-
                 marker.temp = temp;
                 marker.weatherCode = weatherCode;
-
                 const cacheEntry = { data, timestamp: Date.now(), localTime }; // Ajout de l'heure locale dans le cache
                 localStorage.setItem(cacheKey, JSON.stringify(cacheEntry));
                 updateCacheSizeDisplay();
@@ -974,7 +899,6 @@ function createMarker(city) {
             }
         });
     }
-
     return marker;
 }
     // Fonction pour débouncer les événements de la carte
@@ -985,39 +909,38 @@ function createMarker(city) {
             timeout = setTimeout(() => func.apply(this, args), wait);
         };
     }
-
     showErrorHistoryButton.addEventListener('click', function () {
         errorPopup.classList.toggle('open');
     });
-
     // Fonction débouncée pour ajouter des marqueurs pour les villes visibles
     const debouncedAddMarkers = debounce(() => {
         addMarkersForCities(map, cities);
     }, 500);
-
     // Écouteurs d'événements pour les mouvements et les zooms de la carte
     map.on('moveend', debouncedAddMarkers);
     map.on('zoomend', debouncedAddMarkers);
-
+    map.on('moveend', function () {
+        trackView();
+        trackApiCall('mapMove');
+    });
+    map.on('zoomend', function () {
+        trackView();
+        trackApiCall('mapZoom');
+    });
     // Chargement initial des marqueurs
     addMarkersForCities(map, cities);
-
     // Mise à jour de l'affichage de la taille du cache au chargement de la page
     updateCacheSizeDisplay();
-
     themeToggleButton.addEventListener('click', function () {
         const body = document.body;
         const currentTheme = body.getAttribute('data-theme');
-
         if (currentTheme === 'dark') {
             body.removeAttribute('data-theme');
         } else {
             body.setAttribute('data-theme', 'dark');
         }
-
         // Mettre à jour les tuiles de la carte
         updateMapTheme();
-
         // Mettre à jour les marqueurs
         markers.eachLayer(marker => {
             if (marker.temp !== undefined && marker.weatherCode !== undefined) {
@@ -1026,28 +949,22 @@ function createMarker(city) {
             }
         });
     });
-
     resetMapButton.addEventListener('click', function () {
         const mapCenter = [46.2276, 2.2137];
         const mapZoomLevel = 6;
-
         map.setView(mapCenter, mapZoomLevel);
-
         markers.clearLayers();
         loadedMarkers.clear();
+        localStorage.clear(); // Vider le cache
+        updateCacheSizeDisplay();
         addMarkersForCities(map, cities);
-
         sidebar.classList.remove('open');
-
-        console.log('Carte réinitialisée à la vue par défaut.');
+        console.log('Carte et données réinitialisées');
     });
-
     // Gestionnaire d'événements pour le bouton "Désactiver les icônes colorées"
     toggleColorIconsButton.addEventListener('click', function () {
         colorIconsEnabled = !colorIconsEnabled;
-
         this.textContent = colorIconsEnabled ? "Désactiver les icônes colorées" : "Activer les icônes colorées";
-
         markers.eachLayer(marker => {
             if (marker.temp !== undefined && marker.weatherCode !== undefined) {
                 if (!colorIconsEnabled) {
@@ -1066,10 +983,8 @@ function createMarker(city) {
                 }
             }
         });
-
         console.log(`Icônes colorées ${colorIconsEnabled ? 'activées' : 'désactivées'}.`);
     });
-
     // Ajouter des écouteurs d'événements pour les cases à cocher
     document.addEventListener('change', function (e) {
         if (e.target.id === 'toggle-humidity' || e.target.id === 'toggle-pressure' || e.target.id === 'toggle-uv') {
@@ -1080,7 +995,6 @@ function createMarker(city) {
             }
         }
     });
-
     // Mettre à jour l'heure locale en temps réel
     setInterval(() => {
         if (currentWeatherData && currentWeatherData.timezone) {

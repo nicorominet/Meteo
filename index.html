@@ -8,9 +8,7 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
 <div id="mapid"></div>
-
 <!-- Sidebar -->
 <div id="sidebar" class="sidebar" aria-labelledby="sidebar-title" aria-hidden="true">
     <h2 id="sidebar-title" class="sr-only">Détails météorologiques</h2>
@@ -24,7 +22,6 @@
         <!-- Les prévisions météorologiques seront affichées ici sous forme de tableaux -->
     </div>
 </div>
-
 <!-- Hamburger menu -->
 <div class="hamburger-menu" id="hamburger-menu" aria-label="Menu principal">
     <div class="hamburger-icon" id="hamburger-icon" role="button" tabindex="0" aria-expanded="false">
@@ -54,17 +51,14 @@
 </div>
     </div>
 </div>
-
 <!-- API Call Counter -->
 <div id="api-counter" style="position: fixed; bottom: 10px; left: 10px; background-color: rgba(255, 255, 255, 0.8); padding: 5px 10px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); z-index: 1000;">
     Appels API : <span id="api-count">0</span>
 </div>
-
 <!-- Cache Size Display -->
 <div id="cache-size" style="position: fixed; bottom: 10px; left: 210px; background-color: rgba(255, 255, 255, 0.8); padding: 5px 10px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); z-index: 1000;">
     Taille du cache : <span id="cache-size-value">0 KB</span>
 </div>
-
 <!-- Error Popup -->
 <div id="error-popup" class="popup" aria-labelledby="error-popup-title" aria-hidden="true">
     <div class="popup-content">
@@ -73,7 +67,6 @@
         <ul id="error-messages-popup"></ul>
     </div>
 </div>
-
 <!-- Stats Popup -->
 <div id="stats-popup" class="popup" aria-labelledby="stats-popup-title" aria-hidden="true">
     <div class="popup-content">
@@ -84,12 +77,10 @@
         </div>
     </div>
 </div>
-
 <!-- Scripts -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="cities.js"></script>
 <script src="scripts.js"></script>
-
 </body>
 </html>

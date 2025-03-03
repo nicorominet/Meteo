@@ -14,14 +14,12 @@
     --dark-border-color: #444;
     --dark-shadow-color: rgba(255, 255, 255, 0.1);
 }
-
 [data-theme="dark"] {
     --background-color: var(--dark-background-color);
     --text-color: var(--dark-text-color);
     --border-color: var(--dark-border-color);
     --shadow-color: var(--dark-shadow-color);
 }
-
 /* ==================== */
 /* Styles Généraux      */
 /* ==================== */
@@ -32,13 +30,11 @@ body {
     color: var(--text-color);
     transition: background-color var(--animation-duration) ease, color var(--animation-duration) ease;
 }
-
 #mapid {
     width: 100%;
     height: 100vh;
     position: relative;
 }
-
 /* ==================== */
 /* API Counter & Cache Size */
 /* ==================== */
@@ -56,15 +52,12 @@ body {
     align-items: center;
     gap: 5px;
 }
-
 #api-counter { left: 10px; }
 #cache-size { left: 150px; }
-
 #api-counter span, #cache-size span {
     font-weight: bold;
     color: var(--primary-color);
 }
-
 /* ==================== */
 /* Error List & Popup   */
 /* ==================== */
@@ -80,7 +73,6 @@ body {
     z-index: 1000;
     box-shadow: 0 2px 10px var(--shadow-color);
 }
-
 .popup {
     display: none;
     top: 50%;
@@ -92,9 +84,7 @@ body {
     border: 1px solid var(--border-color);
     color: var(--text-color);
 }
-
 .popup.open { display: block; }
-
 #close-error-popup {
     position: absolute;
     top: 10px;
@@ -105,7 +95,6 @@ body {
     cursor: pointer;
     color: var(--text-color);
 }
-
 #error-messages-popup {
     list-style-type: none;
     padding: 0;
@@ -113,22 +102,19 @@ body {
     max-height: 300px;
     overflow-y: auto;
 }
-
 #error-messages-popup li {
     padding: 10px;
     border-bottom: 1px solid var(--border-color);
 }
-
 #error-messages-popup li:last-child { border-bottom: none; }
-
 /* ==================== */
 /* Sidebar              */
 /* ==================== */
 .sidebar {
     position: fixed;
     top: 0;
-    right: -800px;
-    width: 800px;
+    right: -450px;
+    width: 450px;
     height: 100%;
     background-color: var(--background-color);
     border-left: 1px solid var(--border-color);
@@ -138,9 +124,7 @@ body {
     z-index: 1000;
     transition: right var(--animation-duration) ease;
 }
-
 .sidebar.open { right: 0; }
-
 #close-sidebar {
     float: right;
     background: none;
@@ -149,7 +133,6 @@ body {
     cursor: pointer;
     color: var(--text-color);
 }
-
 /* ==================== */
 /* Loading Spinner      */
 /* ==================== */
@@ -169,10 +152,8 @@ body {
     transform: translate(-50%, -50%);
     z-index: 1001;
 }
-
 #loading-spinner i { font-size: 2em; color: var(--primary-color); }
 #loading-spinner p { margin: 0; font-size: 1.2em; color: #333; }
-
 /* ==================== */
 /* Hamburger Menu       */
 /* ==================== */
@@ -186,7 +167,6 @@ body {
     box-shadow: 0 2px 5px var(--shadow-color);
     padding: 10px;
 }
-
 .hamburger-icon {
     font-size: 24px;
     cursor: pointer;
@@ -200,11 +180,9 @@ body {
     color: white;
     transition: background-color 0.3s ease;
 }
-
 .hamburger-icon:hover {
     background-color: darken(var(--primary-color), 10%);
 }
-
 .menu-content {
     display: none;
     flex-direction: column;
@@ -214,13 +192,11 @@ body {
     transform: translateY(-10px);
     transition: opacity 0.3s ease, transform 0.3s ease;
 }
-
 .menu-content.open {
     display: flex;
     opacity: 1;
     transform: translateY(0);
 }
-
 .menu-content button {
     padding: 8px 12px;
     font-size: 14px;
@@ -232,30 +208,25 @@ body {
     transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
-
 .menu-content button:hover {
     background-color: darken(var(--primary-color), 15%);
     color: black;
     border-color: darken(var(--primary-color), 20%);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
-
 .menu-content button:active {
     background-color: darken(var(--primary-color), 25%);
     transform: scale(0.98);
 }
-
 [data-theme="dark"] .menu-content button {
     background-color: var(--dark-primary-color);
     border-color: var(--dark-border-color);
 }
-
 [data-theme="dark"] .menu-content button:hover {
     background-color: darken(var(--dark-primary-color), 15%);
     color: white;
     border-color: darken(var(--dark-border-color), 20%);
 }
-
 /* ==================== */
 /* Animations           */
 /* ==================== */
@@ -268,7 +239,6 @@ body {
     .cloud-marker { animation: moveClouds 5s infinite linear; }
     .fog-marker { animation: fadeFog 3s infinite ease-in-out; }
     .thunderstorm-marker { animation: flash 0.8s infinite linear; }
-
     @keyframes rain { 0% { transform: translateY(0); } 50% { transform: translateY(5px); } 100% { transform: translateY(0); } }
     @keyframes snow { 0% { transform: translateY(0); } 50% { transform: translateY(5px); } 100% { transform: translateY(0); } }
     @keyframes sunRotation { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
@@ -276,7 +246,6 @@ body {
     @keyframes fadeFog { 0%, 100% { opacity: 0.8; } 50% { opacity: 0.4; } }
     @keyframes flash { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 }
-
 /* ==================== */
 /* Responsive Styles    */
 /* ==================== */
@@ -285,13 +254,11 @@ body {
     .sidebar.open { right: 0; }
     .hamburger-menu { width: 90%; left: 5%; top: 5px; }
     .menu-content button { width: 100%; }
-
     /* Désactiver les animations sur mobile */
     .rain-marker-light, .rain-marker-heavy, .snow-marker-light, .snow-marker-heavy, .sun-marker, .cloud-marker, .fog-marker, .thunderstorm-marker {
         animation: none !important;
     }
 }
-
 /* ==================== */
 /* Accessibilité        */
 /* ==================== */
@@ -305,12 +272,21 @@ body {
     clip: rect(0, 0, 0, 0);
     border: 0;
 }
-
 /* ==================== */
 /* Custom Marker Styles */
 /* ==================== */
 .custom-marker { will-change: transform, opacity; }
-
+/* Style for selected marker */
+.selected-marker {
+    border: 4px solid yellow !important; /* Make the border thicker and yellow */
+    box-shadow: 0 0 10px yellow; /* Add a glow effect */
+    z-index: 1000; /* Ensure it's above other markers */
+}
+.selected-marker {
+    border: 3px solid #4a90e2 !important;
+    transform: scale(1.1);
+    z-index: 1000 !important;
+}
 /* ==================== */
 /* Styles pour les tableaux */
 /* ==================== */
@@ -319,21 +295,17 @@ table {
     border-collapse: collapse;
     margin-bottom: 20px;
 }
-
 table th, table td {
     padding: 8px;
     border: 1px solid var(--border-color);
     text-align: center;
     color: var(--text-color);
 }
-
 table th { background-color: var(--primary-color); color: black; }
 table tr { background-color: var(--background-color); }
 table td { background-color: inherit; color: var(--text-color); }
-
 /* Assurer un contraste inversé pour les cellules avec des couleurs de fond */
 table td[style*="background-color"] { color: white; }
-
 /* ==================== */
 /* Styles pour les précipitations */
 /* ==================== */
@@ -341,7 +313,6 @@ table td[style*="background-color"] { color: white; }
     position: relative;
     overflow: hidden;
 }
-
 .precipitation-cell::after {
     content: '';
     position: absolute;
@@ -353,7 +324,6 @@ table td[style*="background-color"] { color: white; }
     animation: rainAnimation 1.5s infinite linear;
     z-index: 1;
 }
-
 .rain-drop {
     position: absolute;
     width: 2px;
@@ -361,10 +331,8 @@ table td[style*="background-color"] { color: white; }
     background-color: rgba(135, 206, 250, 0.7);
     animation: fall linear infinite;
 }
-
 @keyframes rainAnimation { 0% { background-position: 0 0; } 100% { background-position: 0 100%; } }
 @keyframes fall { 0% { transform: translateY(-100%); } 100% { transform: translateY(100%); } }
-
 /* ==================== */
 /* Styles pour la recherche */
 /* ==================== */
@@ -375,7 +343,6 @@ table td[style*="background-color"] { color: white; }
     color: var(--text-color);
     border: 1px solid var(--border-color);
 }
-
 #hamburger-search-button {
     background-color: var(--primary-color);
     color: white;
@@ -384,43 +351,35 @@ table td[style*="background-color"] { color: white; }
     border-radius: 3px;
     cursor: pointer;
 }
-
 #hamburger-search-button:hover { background-color: darken(var(--primary-color), 10%); }
-
 [data-theme="dark"] #hamburger-city-search {
     background-color: var(--dark-background-color);
     color: var(--dark-text-color);
     border-color: var(--dark-border-color);
 }
-
 [data-theme="dark"] #hamburger-search-button {
     background-color: var(--primary-color);
     color: white;
 }
-
 .weather-emoji {
     font-size: 1.2em;
     vertical-align: middle;
 }
-
 #toggle-options {
     display: flex;
     flex-direction: column;
     gap: 10px;
     margin-top: 10px;
 }
-
 #toggle-options label {
     display: flex;
     align-items: center;
     font-size: 14px;
     color: #333;
 }
-
 #toggle-options input[type="checkbox"] {
     margin-right: 5px;
 }
-
 /* ==================== */
 /* Styles pour la popup des statistiques */
 /* ==================== */
@@ -438,7 +397,6 @@ table td[style*="background-color"] { color: white; }
     width: 90%;
     color: var(--text-color);
 }
-
 #close-stats-popup {
     position: absolute;
     top: 10px;
@@ -449,7 +407,6 @@ table td[style*="background-color"] { color: white; }
     cursor: pointer;
     color: var(--text-color);
 }
-
 #close-stats-popup:hover {
     color: var(--primary-color);
 }
